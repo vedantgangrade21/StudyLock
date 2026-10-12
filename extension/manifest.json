@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "StudyLock Shield",
+  "version": "1.0.0",
+  "description": "Locks distracting sites behind a full-screen overlay while a StudyLock study session is running.",
+  "permissions": ["storage", "alarms"],
+  "host_permissions": ["http://127.0.0.1:47821/*"],
+  "background": { "service_worker": "background.js" },
+  "action": { "default_popup": "popup.html", "default_title": "StudyLock Shield" },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*", "https://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ]
+}

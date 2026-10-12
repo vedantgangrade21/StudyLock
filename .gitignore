@@ -1,0 +1,8 @@
+# live session state and runtime files - machine-specific, never shared
+state.json
+state.json.tmp
+config.json.tmp
+run/
+__pycache__/
+*.pyc
+config.json

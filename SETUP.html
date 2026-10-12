@@ -1,0 +1,113 @@
+<meta charset="utf-8">
+<title>StudyLock setup</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; background: #0b0f14; color: #e8eef7;
+         font: 15px/1.65 "Segoe UI", system-ui, sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 56px 32px 90px; }
+  .badge { font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #7dd3fc; }
+  h1 { font-size: 34px; font-weight: 600; margin: 14px 0 6px; }
+  h2 { font-size: 19px; font-weight: 600; margin: 46px 0 10px; }
+  p.lead { color: #9fb3c8; margin-top: 0; }
+  ol, ul { padding-left: 22px; }
+  li { margin: 9px 0; }
+  code { background: #121a26; border: 1px solid #1e2a3a; border-radius: 5px;
+         padding: 2px 7px; font: 13px "Cascadia Mono", Consolas, monospace; color: #7dd3fc; }
+  .card { background: #121a26; border: 1px solid #1e2a3a; border-radius: 12px;
+          padding: 20px 24px; margin: 18px 0; }
+  .muted { color: #64798f; font-size: 13.5px; }
+  .warn { border-color: #4a3630; background: #1c1512; }
+  table { border-collapse: collapse; width: 100%; margin-top: 10px; font-size: 14px; }
+  td, th { text-align: left; padding: 9px 10px; border-bottom: 1px solid #1e2a3a; vertical-align: top; }
+  th { color: #64798f; font-weight: 600; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
+</style>
+<main>
+  <div class="badge">StudyLock</div>
+  <h1>Setup — three steps</h1>
+  <p class="lead">Do this once. After that, opening StudyLock and pressing start is the whole ritual.</p>
+
+  <h2>1. Install the browser shield</h2>
+  <p>This is what puts the overlay over distracting pages. Do it in <strong>both Chrome and Edge</strong> if you use both.</p>
+  <ol>
+    <li>Open <code>chrome://extensions</code> (or <code>edge://extensions</code>).</li>
+    <li>Turn on <strong>Developer mode</strong>, top right.</li>
+    <li>Click <strong>Load unpacked</strong> and choose the <code>extension</code> folder inside your StudyLock folder.</li>
+    <li>Click <strong>Details</strong> on “StudyLock Shield” and switch on <strong>Allow in Incognito / InPrivate</strong>.</li>
+  </ol>
+  <p class="muted">Pin it if you like — the toolbar icon shows the time left. It has no off switch.</p>
+
+  <h2>2. Set your IGCSE Discord server</h2>
+  <ol>
+    <li>In Discord: <strong>Settings → Advanced → Developer Mode</strong>, on.</li>
+    <li>Right-click your IGCSE server’s icon → <strong>Copy Server ID</strong>.</li>
+    <li>In StudyLock, click <strong>settings</strong> and paste it in.</li>
+  </ol>
+  <p>During a session the Discord <em>app</em> is closed on sight. Discord in the browser stays open, but only at
+     <code>discord.com/channels/&lt;your IGCSE server&gt;</code> — DMs, other servers, friends and discovery all get the overlay.</p>
+  <p class="muted">Leave the field empty and Discord is blocked completely instead.</p>
+
+  <h2>3. Harden it <span class="muted">(recommended)</span></h2>
+  <p>Right-click <code>harden.ps1</code> → <strong>Run with PowerShell</strong>, and accept the admin prompt. This one-time step:</p>
+  <ul>
+    <li>runs the blocker as an <strong>elevated scheduled task</strong> that restarts at every logon and re-checks once a minute — so killing it in Task Manager buys you 60 seconds at most;</li>
+    <li>lets it blackhole distracting domains in the <strong>hosts file</strong> during a session, which covers Firefox, any other browser and any profile — not just the ones with the extension;</li>
+    <li>turns off <strong>Incognito, InPrivate, guest mode and new profiles</strong>, which would otherwise run without the extension.</li>
+  </ul>
+  <p class="muted">Without this step everything still works — the blocker just runs unelevated, and a fresh browser profile
+     without the extension would slip through.</p>
+
+  <h2>What gets blocked</h2>
+  <table>
+    <tr><th>Layer</th><th>Covers</th></tr>
+    <tr><td>Process killer</td><td>Steam, Epic, EA, Ubisoft, Riot, Roblox, Marvel Rivals, Geometry Dash, Hollow Knight, Trackmania, BTD6, Rainbow Six, DELTARUNE, Hogwarts Legacy, Discord/Vencord, Medal, FreeTube — plus every Minecraft launcher (Lunar, Modrinth, Prism, MultiMC, ATLauncher, CurseForge, Badlion, Feather) and anything launched from a game library folder, so new installs are covered automatically.</td></tr>
+    <tr><td>Every other browser</td><td>Only Chrome and Edge carry the shield, so all other browsers are closed on sight: Firefox and Nightly, Tor, LibreWolf, Waterfox, Pale Moon, Basilisk, Floorp, Zen, SeaMonkey, Opera and GX, Brave, Vivaldi, Arc, Yandex, Whale, Chromium, Thorium, Iron, Slimjet, Cent, Maxthon, UC, Puffin, Falkon, Midori, qutebrowser, DuckDuckGo, Avast/AVG/Norton browsers, Internet Explorer and more. Chrome Canary/Beta/Dev and Edge Beta/Dev reuse the same <code>chrome.exe</code>/<code>msedge.exe</code> names, so those are caught by install path instead — installing a second Chrome channel is not a way round the extension.</td></tr>
+    <tr><td>Browser overlay</td><td>Instagram, TikTok, Snapchat, X, Reddit, Twitch, Netflix, anime and browser-game sites, chess sites, store pages, WhatsApp/Telegram web, and anything you add in settings.</td></tr>
+    <tr><td>Partial rules</td><td>YouTube: <code>/watch</code>, search, playlists and channels stay open; the home feed, <code>/shorts</code> and <code>/gaming</code> do not. Discord: your IGCSE server only.</td></tr>
+    <tr><td>Hosts file <span class="muted">(hardened only)</span></td><td>The same blocked domains, at DNS level, in every browser at once.</td></tr>
+  </table>
+
+  <h2>What always stays open</h2>
+  <p>These are on a hard allowlist that wins over every block rule — they can’t be overlaid, can’t be killed,
+     and never reach the hosts file, even if something else on the lists would have matched them.</p>
+  <table>
+    <tr><th>Apps</th><td>Claude, Microsoft Teams, Notepad, the Clock/Timer app</td></tr>
+    <tr><th>Sites</th><td>Save My Exams, Physics &amp; Maths Tutor, Google Docs / Sheets / Slides / Drive,
+        Google Classroom, Gemini, claude.ai, Teams web — plus the Google sign-in page so none of them lock you out</td></tr>
+  </table>
+  <p class="muted">To add to it, edit <code>allowed_domains</code> or <code>allowed_processes</code> in
+     <code>config.json</code> between sessions. There is deliberately no in-app editor for the allowlist:
+     adding an exception should take more effort than clicking a button while you’re bored mid-session.</p>
+
+  <div class="card">
+    <strong>Removing the extension doesn’t work.</strong> Chrome lets you delete any developer-mode
+    extension, so the shield reports in to the blocker every few seconds instead. If Chrome or Edge is
+    running during a session and its shield has been silent for 90 seconds, the blocker closes that
+    browser — and closes it again a few seconds after each relaunch. Deleting or disabling the extension
+    doesn’t unlock the browser, it costs you the browser for the rest of the session.
+    <p class="muted" style="margin-bottom:0">Because of this, install the extension in <strong>both Chrome
+    and Edge</strong>. Edge ships with Windows, so an unshielded Edge would be a free pass — which means
+    the blocker treats it as one and won’t let it stay open without the extension.</p>
+  </div>
+
+  <h2>How it refuses to let you out</h2>
+  <ul>
+    <li>Removing or disabling the browser extension closes the browser, repeatedly, until it’s back.</li>
+    <li>No stop, pause or cancel exists anywhere in the app.</li>
+    <li>Closing the timer window does nothing — the blocker is a separate process.</li>
+    <li>Two blocker processes watch each other and restart the one that dies.</li>
+    <li>Rebooting doesn’t help: the session is stored on disk and resumes at logon.</li>
+    <li>Winding the system clock forward doesn’t help: the countdown also runs on a monotonic timer and takes whichever is longer.</li>
+    <li>Deleting <code>state.json</code> doesn’t help: the running blocker writes it straight back.</li>
+    <li>Killing the blocker doesn’t unblock the browser: the extension keeps the shield up for the rest of the session and only lifts it when the blocker itself says the time is up.</li>
+    <li>Editing <code>config.json</code> mid-session doesn’t help: the rules are frozen into the session at the moment you press start.</li>
+  </ul>
+
+  <div class="card warn">
+    <strong>The honest limit.</strong> This is a user-level program on your own PC, not a corporate lockdown.
+    Someone with administrator rights, enough patience and a boot into Safe Mode can always dismantle it —
+    that is true of Cold Turkey and Freedom too. What it does guarantee is that quitting takes real,
+    deliberate, inconvenient effort, which is the whole point. Don’t go looking for the seams.
+  </div>
+
+  <p class="muted">Uninstalling the hardening: run <code>unharden.ps1</code> as administrator. It refuses to run while a session is in progress.</p>
+</main>
