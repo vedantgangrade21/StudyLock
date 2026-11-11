@@ -161,12 +161,15 @@
     "waterfox.exe",
     "wavebox.exe",
     "whale.exe",
+    "whatsapp.exe",
+    "whatsapp.root.exe",
     "yandex.exe",
     "youtube music desktop app.exe",
     "zen.exe"
   ],
   "blocked_path_fragments": [
     "/.minecraft/",
+    "/5319275a.whatsappdesktop_",
     "/badlion/",
     "/chrome beta/",
     "/chrome canary/",
