@@ -152,15 +152,13 @@
       links.appendChild(a);
     }
     const task = shadow.getElementById("sl-task");
-    task.innerHTML = session && session.label
-      ? 'You are meant to be working on <span class="task">' + escapeHtml(session.label) + "</span>."
-      : "";
-  }
-
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, (c) => (
-      { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
-    ));
+    task.textContent = "";
+    if (session && session.label) {
+      const em = document.createElement("span");
+      em.className = "task";
+      em.textContent = session.label;
+      task.append("You are meant to be working on ", em, ".");
+    }
   }
 
   function unmount() {

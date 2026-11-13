@@ -32,8 +32,15 @@ async function render() {
   clock.textContent = fmt(left);
   const n = (raw.rules?.blocked_domains?.length || 0) +
             Object.keys(raw.rules?.restricted_domains || {}).length;
-  sub.innerHTML = (raw.label ? `Working on <span class="task">${raw.label}</span>.<br>` : "") +
-                  `${n} sites shielded${raw.hardened ? " &middot; hardened" : ""}.`;
+  // Built from nodes, not innerHTML: the session label is free text.
+  sub.textContent = "";
+  if (raw.label) {
+    const task = document.createElement("span");
+    task.className = "task";
+    task.textContent = raw.label;
+    sub.append("Working on ", task, ".", document.createElement("br"));
+  }
+  sub.append(`${n} sites shielded${raw.hardened ? " · hardened" : ""}.`);
 }
 
 api.runtime.sendMessage({ type: "refresh" }).catch(() => {});

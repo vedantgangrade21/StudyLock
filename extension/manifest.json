@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "StudyLock Shield",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Locks distracting sites behind a full-screen overlay while a StudyLock study session is running.",
   "permissions": [
     "storage",
