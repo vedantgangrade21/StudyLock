@@ -28,7 +28,8 @@ Write-Host "  [ok] scheduled task removed" -ForegroundColor Green
 
 foreach ($p in @(
     @{ Path = "HKLM:\SOFTWARE\Policies\Google\Chrome";  Names = @("IncognitoModeAvailability","BrowserGuestModeEnabled","BrowserAddPersonEnabled") },
-    @{ Path = "HKLM:\SOFTWARE\Policies\Microsoft\Edge"; Names = @("InPrivateModeAvailability","BrowserGuestModeEnabled","BrowserAddProfileEnabled") }
+    @{ Path = "HKLM:\SOFTWARE\Policies\Microsoft\Edge"; Names = @("InPrivateModeAvailability","BrowserGuestModeEnabled","BrowserAddProfileEnabled") },
+    @{ Path = "HKLM:\SOFTWARE\Policies\Mozilla\Firefox"; Names = @("ExtensionSettings","DisablePrivateBrowsing") }
 )) {
     foreach ($n in $p.Names) {
         Remove-ItemProperty -Path $p.Path -Name $n -ErrorAction SilentlyContinue

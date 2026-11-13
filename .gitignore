@@ -6,3 +6,4 @@ run/
 __pycache__/
 *.pyc
 config.json
+dist/

@@ -70,7 +70,28 @@ Set-Policy $edge "BrowserGuestModeEnabled" 0
 Set-Policy $edge "BrowserAddProfileEnabled" 0
 Write-Host "  [ok] Edge: InPrivate, guest mode and new profiles disabled" -ForegroundColor Green
 
+# Firefox: if you have the Mozilla-signed build of the extension, force-install it.
+# A force-installed add-on cannot be disabled or removed, and it runs in private
+# windows too. Release Firefox only accepts signed add-ons, so without the signed
+# file we fall back to switching private browsing off instead.
+$firefox = "HKLM:\SOFTWARE\Policies\Mozilla\Firefox"
+if (-not (Test-Path $firefox)) { New-Item -Path $firefox -Force | Out-Null }
+$xpi = Join-Path $base "dist\studylock-shield.xpi"
+if (Test-Path $xpi) {
+    $url = "file:///" + ($xpi -replace '\\', '/')
+    $settings = @{ "studylock-shield@vedantgangrade21" = @{
+        installation_mode = "force_installed"; install_url = $url; private_browsing = $true } } |
+        ConvertTo-Json -Depth 4 -Compress
+    New-ItemProperty -Path $firefox -Name "ExtensionSettings" -Value $settings -PropertyType String -Force | Out-Null
+    Remove-ItemProperty -Path $firefox -Name "DisablePrivateBrowsing" -ErrorAction SilentlyContinue
+    Write-Host "  [ok] Firefox: StudyLock Shield force-installed - it cannot be removed, and runs in private windows" -ForegroundColor Green
+} else {
+    New-ItemProperty -Path $firefox -Name "DisablePrivateBrowsing" -Value 1 -PropertyType DWord -Force | Out-Null
+    Write-Host "  [ok] Firefox: private browsing disabled" -ForegroundColor Green
+    Write-Host "       (put the Mozilla-signed studylock-shield.xpi in dist\ and re-run to force-install instead)" -ForegroundColor DarkGray
+}
+
 Write-Host ""
-Write-Host "Hardening done. Restart Chrome/Edge for the policies to apply." -ForegroundColor Cyan
+Write-Host "Hardening done. Restart Chrome, Edge and Firefox for the policies to apply." -ForegroundColor Cyan
 Write-Host "The hosts-file layer will now switch on automatically during sessions."
 Read-Host "Press Enter to close"

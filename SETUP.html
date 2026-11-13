@@ -36,6 +36,19 @@
   </ol>
   <p class="muted">Pin it if you like — the toolbar icon shows the time left. It has no off switch.</p>
 
+  <h2>1b. Firefox</h2>
+  <p>The same extension runs in Firefox 128+. Release Firefox only installs add-ons signed by Mozilla, so there are two ways in:</p>
+  <ol>
+    <li><strong>Permanent (do this):</strong> upload <code>dist\studylock-shield.zip</code> at
+        <code>addons.mozilla.org/developers</code> and pick <strong>“On your own”</strong> distribution. Signing is free and
+        usually done in minutes. Download the signed <code>.xpi</code>, drag it into Firefox, and save a copy as
+        <code>dist\studylock-shield.xpi</code> — then <code>harden.ps1</code> force-installs it so it can’t be removed.</li>
+    <li><strong>Quick test:</strong> <code>about:debugging</code> → This Firefox → <strong>Load Temporary Add-on</strong> →
+        choose <code>extension\manifest.json</code>. It vanishes when Firefox restarts.</li>
+  </ol>
+  <p class="muted">Keep the extension in Chrome too if you still use it. A browser with no shield is left alone until the
+     extension has checked in from it once — after that, removing it closes the browser during sessions.</p>
+
   <h2>2. Set your IGCSE Discord server</h2>
   <ol>
     <li>In Discord: <strong>Settings → Advanced → Developer Mode</strong>, on.</li>

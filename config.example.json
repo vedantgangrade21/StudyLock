@@ -10,7 +10,8 @@
   "require_browser_shield": true,
   "shielded_browsers": {
     "chrome.exe": "chrome",
-    "msedge.exe": "edge"
+    "msedge.exe": "edge",
+    "firefox.exe": "firefox"
   },
   "shield_grace_seconds": 25,
   "shield_timeout_seconds": 90,
@@ -79,7 +80,6 @@
     "epicwebhelper.exe",
     "falkon.exe",
     "feather launcher.exe",
-    "firefox.exe",
     "floorp.exe",
     "freetube.exe",
     "galaxyclient.exe",
@@ -184,6 +184,8 @@
     "/electronic arts/",
     "/epic games/",
     "/feather/",
+    "/firefox developer edition/",
+    "/firefox nightly/",
     "/geometrydash",
     "/hogwarts legacy",
     "/librewolf/",

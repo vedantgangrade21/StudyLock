@@ -8,7 +8,7 @@ Pick a duration, press start, and until the clock runs out:
 - **Apps are closed on sight.** Games, launchers (Steam, Epic, EA, Ubisoft, Riot),
   Minecraft launchers, Discord desktop, screen recorders - matched by executable
   name *and* by install folder, so new installs are covered automatically.
-- **Distracting sites get a full-screen overlay** from a Chrome/Edge extension.
+- **Distracting sites get a full-screen overlay** from a Chrome/Edge/Firefox extension.
   The overlay lives in a closed shadow root and re-attaches itself if removed.
 - **Discord is narrowed to your study servers.** Your allowed servers stay open;
   DMs, other servers, discovery and invite links do not. The block page offers
@@ -59,7 +59,7 @@ What it guarantees is that quitting takes real, deliberate, inconvenient effort.
 ## Requirements
 
 Windows 10/11, Python 3.11+ (standard library only - no pip packages, nothing to
-`pip install`), and Chrome or Edge for the site overlay.
+`pip install`), and Chrome, Edge or Firefox (128+) for the site overlay.
 
 ## Install
 
@@ -68,10 +68,23 @@ Windows 10/11, Python 3.11+ (standard library only - no pip packages, nothing to
 2. **Run `install.ps1`** - right-click it, Run with PowerShell. No admin needed.
    It finds Python, creates your `config.json` from the template, and puts a
    StudyLock shortcut on your Desktop.
-3. **Install the browser extension** - open `chrome://extensions`, turn on
-   Developer mode, click *Load unpacked*, and pick the `extension` folder. Open
-   *Details* and allow it in Incognito. Do the same in `edge://extensions` if you
-   use Edge, otherwise Edge will not stay open during a session.
+3. **Install the browser extension** - one extension works in Chrome, Edge and
+   Firefox. Install it in *every* browser you use: a browser without it is left
+   alone until it has checked in once, and after that it gets closed during a
+   session if the shield goes quiet.
+   - **Chrome / Edge** - open `chrome://extensions` (or `edge://extensions`), turn
+     on Developer mode, click *Load unpacked*, pick the `extension` folder, then
+     open *Details* and allow it in Incognito / InPrivate.
+   - **Firefox (permanent)** - release Firefox only installs Mozilla-signed
+     add-ons. Signing your own copy is free and takes a few minutes: zip the
+     `extension` folder contents (or use `dist/studylock-shield.zip` if you have
+     it), upload it at [addons.mozilla.org/developers](https://addons.mozilla.org/developers/addon/submit/distribution)
+     choosing **"On your own"**, then download the signed `.xpi` and drag it into
+     Firefox. Save that file as `dist/studylock-shield.xpi` and `harden.ps1` will
+     force-install it so it cannot be removed.
+   - **Firefox (quick test)** - `about:debugging` -> This Firefox -> *Load
+     Temporary Add-on* -> pick `extension/manifest.json`. It disappears when
+     Firefox restarts, so use the signed build for everyday use.
 4. **Add your Discord servers** - in Discord, Settings -> Advanced -> Developer
    Mode, then right-click a server icon -> Copy Server ID. Paste the IDs into the
    app's settings screen. Leave it empty to block Discord completely.
@@ -79,7 +92,8 @@ Windows 10/11, Python 3.11+ (standard library only - no pip packages, nothing to
    registers the blocker as an elevated scheduled task that restarts at logon and
    re-checks every minute, enables the hosts-file layer (which covers *every*
    browser, not just the ones with the extension), and disables Incognito, guest
-   mode and new browser profiles. `unharden.ps1` reverses it and refuses to run
+   mode and new browser profiles, and force-installs the signed Firefox add-on
+   if you have it. `unharden.ps1` reverses it and refuses to run
    during a session.
 
 If you skip `install.ps1`, start the app directly:

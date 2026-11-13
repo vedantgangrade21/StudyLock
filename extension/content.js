@@ -4,6 +4,7 @@
 // overlay that cannot be dismissed, scrolled past or removed.
 
 (() => {
+  const api = globalThis.browser || globalThis.chrome;   // Firefox: browser.*, Chrome: chrome.*
   const KEY = "studylock";
   const HOST_ID = "studylock-shield-root";
 
@@ -211,7 +212,7 @@
 
   async function refreshFromStorage() {
     try {
-      const store = await chrome.storage.local.get(KEY);
+      const store = await api.storage.local.get(KEY);
       session = fromStore(store[KEY]);
     } catch (e) { /* keep the last known session */ }
     apply();
@@ -219,11 +220,11 @@
 
   function pingWorker() {
     try {
-      chrome.runtime.sendMessage({ type: "refresh" }, (resp) => {
-        if (chrome.runtime.lastError) return;   // worker asleep; storage still valid
+      // promise form works in both browsers; Firefox has no callback form
+      api.runtime.sendMessage({ type: "refresh" }).then((resp) => {
         if (resp) session = fromStore(resp);
         apply();
-      });
+      }).catch(() => { /* worker asleep; storage still valid */ });
     } catch (e) { /* extension context torn down */ }
   }
 
@@ -232,7 +233,7 @@
   refreshFromStorage();
   pingWorker();
 
-  chrome.storage.onChanged.addListener((changes, area) => {
+  api.storage.onChanged.addListener((changes, area) => {
     if (area === "local" && changes[KEY]) {
       session = fromStore(changes[KEY].newValue);
       apply();

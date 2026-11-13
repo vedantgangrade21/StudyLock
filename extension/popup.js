@@ -1,3 +1,4 @@
+const api = globalThis.browser || globalThis.chrome;   // Firefox: browser.*, Chrome: chrome.*
 const KEY = "studylock";
 
 function fmt(s) {
@@ -8,7 +9,7 @@ function fmt(s) {
 }
 
 async function render() {
-  const store = await chrome.storage.local.get(KEY);
+  const store = await api.storage.local.get(KEY);
   const raw = store[KEY];
   const badge = document.getElementById("badge");
   const clock = document.getElementById("clock");
@@ -35,6 +36,6 @@ async function render() {
                   `${n} sites shielded${raw.hardened ? " &middot; hardened" : ""}.`;
 }
 
-chrome.runtime.sendMessage({ type: "refresh" }, () => void chrome.runtime.lastError);
+api.runtime.sendMessage({ type: "refresh" }).catch(() => {});
 render();
 setInterval(render, 500);
